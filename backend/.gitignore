@@ -1,0 +1,25 @@
+# Rasa models
+models/
+
+# Config files
+config.yml
+credentials.yml
+endpoints.yml
+domain.yml
+nlu.yml
+stories.yml
+
+# Python files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# IDE folders
+.vscode/
+.idea/
+
+# Operating System files
+.DS_Store
+Thumbs.db
+git status
