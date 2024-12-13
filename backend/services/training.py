@@ -32,7 +32,7 @@ def train_model():
 
     model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
     print("Comenzando el entrenamiento...")
-    model.fit(padded_sequences, np.array(labels_encoded), epochs=10, batch_size=16)
+    model.fit(padded_sequences, np.array(labels_encoded), epochs=10, batch_size=16, verbose=1)
 
     model.save('model/chatbot_model.h5')
 
