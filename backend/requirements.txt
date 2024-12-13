@@ -1,0 +1,4 @@
+Flask==2.2.2
+tensorflow==2.10.0
+scikit-learn==1.1.2
+supabase==0.1.12

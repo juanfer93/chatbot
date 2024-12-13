@@ -1,25 +1,19 @@
-# Rasa models
-models/
+# Ignorar el entorno virtual
+venv/
+env/
 
-# Config files
-config.yml
-credentials.yml
-endpoints.yml
-domain.yml
-nlu.yml
-stories.yml
-
-# Python files
+# Ignorar archivos de caché y bytecode de Python
 __pycache__/
 *.pyc
 *.pyo
-*.pyd
 
-# IDE folders
-.vscode/
-.idea/
+# Ignorar archivos de log y temporales
+*.log
+*.tmp
 
-# Operating System files
+# Ignorar archivos específicos del sistema operativo
 .DS_Store
 Thumbs.db
-git status
+
+# Ignorar archivos de modelos entrenados (si no deseas subirlos)
+model/chatbot_model.h5
