@@ -1,4 +1,9 @@
-Flask==2.2.2
-tensorflow==2.10.0
-scikit-learn==1.1.2
-supabase==0.1.12
+tensorflow==2.18.0
+keras==3.7.0
+scikit-learn==1.6.0
+numpy==2.0.2
+pydantic==2.10.3
+supabase==2.10.0
+requests==2.32.3
+scipy==1.14.1
+

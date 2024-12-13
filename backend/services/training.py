@@ -4,10 +4,13 @@ from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from sklearn.preprocessing import LabelEncoder
 import numpy as np
-from services.database import fetch_training_data
+from .database import fetch_training_data
 
 def train_model():
     intents, examples = fetch_training_data()
+
+    print(f"Intents: {intents}")
+    print(f"Examples: {examples}")
 
     texts = [example['text'] for example in examples]
     labels = [intent['name'] for intent in intents for example in examples if example['intent_id'] == intent['id']]
@@ -28,6 +31,7 @@ def train_model():
     ])
 
     model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+    print("Comenzando el entrenamiento...")
     model.fit(padded_sequences, np.array(labels_encoded), epochs=10, batch_size=16)
 
     model.save('model/chatbot_model.h5')
