@@ -33,10 +33,8 @@ def train_model():
     model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
     print("Comenzando el entrenamiento...")
 
-    # Entrenamiento con verbose=1 para ver la salida estándar
     history = model.fit(padded_sequences, np.array(labels_encoded), epochs=10, batch_size=16, verbose=1)
 
-    # Al finalizar, imprime el resultado final
     print(f"\nEntrenamiento completado. Resultados finales: ")
     print(f"Loss: {history.history['loss'][-1]}")
     print(f"Accuracy: {history.history['accuracy'][-1]}")
