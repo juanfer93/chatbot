@@ -35,6 +35,7 @@ def train_model():
 
     print("Iniciando el entrenamiento...")
     print(f"Datos de entrada: {len(padded_sequences)} ejemplos, {len(tokenizer.word_index)} palabras.")
+
     history = model.fit(padded_sequences, np.array(labels_encoded), epochs=10, batch_size=16, verbose=2)
 
     print(f"\nEntrenamiento completado. Resultados finales: ")
