@@ -17,3 +17,5 @@ Thumbs.db
 
 # Ignorar archivos de modelos entrenados (si no deseas subirlos)
 model/chatbot_model.h5
+
+.env
