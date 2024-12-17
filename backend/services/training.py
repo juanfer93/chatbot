@@ -4,7 +4,16 @@ from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from sklearn.preprocessing import LabelEncoder
 import numpy as np
+import re
+import unicodedata
 from services.database import fetch_training_data
+
+def preprocess_text(text: str) -> str:
+    text = text.lower()
+    text = unicodedata.normalize("NFKD", text).encode("ASCII", "ignore").decode("utf-8")
+    text = re.sub(r"[^a-záéíóúüñ¿?¡!.,\s]", "", text)
+    text = re.sub(r"\s+", " ", text).strip()
+    return text
 
 def train_model():
     intents, examples = fetch_training_data()
@@ -14,7 +23,7 @@ def train_model():
     print("Examples:", examples)
 
     print("\n=== Procesando datos para entrenamiento ===")
-    texts = [example['text'] for example in examples]
+    texts = [preprocess_text(example['text']) for example in examples]
     labels = []
     for intent in intents:
         for example in examples:
