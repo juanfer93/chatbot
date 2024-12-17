@@ -1,5 +1,7 @@
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Embedding, GlobalAveragePooling1D
+from tensorflow.keras.layers import Dense, Embedding, Dropout, GlobalAveragePooling1D
+from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.callbacks import EarlyStopping
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from sklearn.preprocessing import LabelEncoder
@@ -55,16 +57,23 @@ def train_model():
     print(f"Clases únicas: {list(label_encoder.classes_)}")
 
     model = Sequential([
-        Embedding(input_dim=len(tokenizer.word_index) + 1, output_dim=16),
-        GlobalAveragePooling1D(),
-        Dense(16, activation='relu'),
-        Dense(len(label_encoder.classes_), activation='softmax')
+        Embedding(input_dim=len(tokenizer.word_index) + 1, output_dim=32, input_length=padded_sequences.shape[1]),
+        GlobalAveragePooling1D(),  
+        Dropout(0.2),
+        Dense(64, activation='relu'),
+        Dropout(0.2),
+        Dense(len(label_encoder.classes_), activation='softmax')  
     ])
-    model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+
+    optimizer = Adam(learning_rate=0.001)
+    model.compile(optimizer=optimizer, loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
     print("\n=== Iniciando entrenamiento ===")
     print(f"Datos de entrada: {len(padded_sequences)} ejemplos, {len(tokenizer.word_index)} palabras únicas.")
-    history = model.fit(padded_sequences, np.array(labels_encoded), epochs=10, batch_size=16, verbose=1)
+
+    early_stopping = EarlyStopping(monitor='val_loss', patience=3, restore_best_weights=True)
+
+    history = model.fit(padded_sequences, np.array(labels_encoded), epochs=50, batch_size=16, verbose=1, callbacks=[early_stopping])
 
     print("\n=== Entrenamiento completado ===")
     print(f"Loss final: {history.history['loss'][-1]}")
