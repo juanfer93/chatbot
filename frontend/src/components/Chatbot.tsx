@@ -14,29 +14,48 @@ const Chatbot: React.FC = () => {
     setLoading,
   } = useStore();
 
-  const handleSendMessage = () => {
-    if (!userInput.trim()) return;
+  const backendUrl = process.env.REACT_APP_BACKEND_URL; 
 
+  const handleSendMessage = async () => {
+    if (!userInput.trim()) return;
+  
     const userMessage = {
       id: Date.now().toString(),
       text: userInput,
       sender: "user" as const,
     };
     addMessage(userMessage);
-
+  
     setUserInput("");
-
     setLoading(true);
-    setTimeout(() => {
+  
+    try {
+      const response = await fetch(`${backendUrl}/chat`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message: userInput }),
+      });
+  
+      const data = await response.json();
       const botMessage = {
         id: (Date.now() + 1).toString(),
-        text: "¡Hola! Esto es una respuesta del bot.",
+        text: data.response,
         sender: "bot" as const,
       };
       addMessage(botMessage);
+    } catch (error) {
+      console.error("Error al conectar con el backend:", error);
+      addMessage({
+        id: (Date.now() + 2).toString(),
+        text: "Hubo un error al conectar con el servidor.",
+        sender: "bot" as const,
+      });
+    } finally {
       setLoading(false);
-    }, 1000);
-  };
+    }
+  };  
 
   return (
     <div>

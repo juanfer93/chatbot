@@ -1,8 +1,10 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from services.training import train_model
 from services.prediction import handle_message
 
 app = Flask(__name__)
+CORS(app)  
 
 @app.route('/chat', methods=['POST'])
 def chat():

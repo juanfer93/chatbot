@@ -8,7 +8,8 @@ from services.database import save_unclassified_message
 model = load_model('model/chatbot_model.h5')
 
 with open('model/tokenizer.json', 'r') as f:
-    tokenizer = tokenizer_from_json(json.load(f))
+    tokenizer_data = json.load(f)  
+    tokenizer = tokenizer_from_json(json.dumps(tokenizer_data))  
 
 with open('model/label_encoder.npy', 'rb') as f:
     label_encoder = np.load(f)
