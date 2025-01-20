@@ -8,7 +8,7 @@ from sklearn.preprocessing import LabelEncoder
 import numpy as np
 import re
 import unicodedata
-from services.database import fetch_training_data
+from .database import fetch_training_data
 
 def preprocess_text(text: str) -> str:
     text = text.lower()
