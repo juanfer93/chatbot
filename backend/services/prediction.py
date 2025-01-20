@@ -5,13 +5,13 @@ from tensorflow.keras.preprocessing.text import tokenizer_from_json
 import json
 from services.database import save_unclassified_message
 
-model = load_model('model/chatbot_model.h5')
+model = load_model('backend/model/chatbot_model.h5')
 
-with open('model/tokenizer.json', 'r') as f:
+with open('backend/model/tokenizer.json', 'r') as f:
     tokenizer_data = json.load(f)  
     tokenizer = tokenizer_from_json(json.dumps(tokenizer_data))  
 
-with open('model/label_encoder.npy', 'rb') as f:
+with open('backend/model/label_encoder.npy', 'rb') as f:
     label_encoder = np.load(f)
 
 def predict_intent(message):

@@ -1,3 +1,6 @@
+# Ignorar la carpeta que contiene los modelos entrenados
+backend/model/
+
 # Ignorar el entorno virtual
 venv/
 env/
@@ -16,6 +19,7 @@ __pycache__/
 Thumbs.db
 
 # Ignorar archivos de modelos entrenados (si no deseas subirlos)
-model/chatbot_model.h5
+backend/model/chatbot_model.h5
 
+# Ignorar archivo de variables de entorno
 .env

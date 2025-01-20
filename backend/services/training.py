@@ -79,14 +79,14 @@ def train_model():
     print(f"Loss final: {history.history['loss'][-1]}")
     print(f"Accuracy final: {history.history['accuracy'][-1]}")
 
-    model.save('model/chatbot_model.h5')
+    model.save('backend/model/chatbot_model.h5')
     print("\nModelo guardado en: model/chatbot_model.h5")
 
-    with open('model/tokenizer.json', 'w') as f:
+    with open('backend/model/tokenizer.json', 'w') as f:
         f.write(tokenizer.to_json())
     print("Tokenizador guardado en: model/tokenizer.json")
 
-    with open('model/label_encoder.npy', 'wb') as f:
+    with open('backend/model/label_encoder.npy', 'wb') as f:
         np.save(f, label_encoder.classes_)
     print("Codificador de etiquetas guardado en: model/label_encoder.npy")
 
