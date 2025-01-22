@@ -57,12 +57,14 @@ def train_model():
     print(f"Clases únicas: {list(label_encoder.classes_)}")
 
     model = Sequential([
-        Embedding(input_dim=len(tokenizer.word_index) + 1, output_dim=32, input_length=padded_sequences.shape[1]),
-        GlobalAveragePooling1D(),  
-        Dropout(0.2),
+        Embedding(input_dim=len(tokenizer.word_index) + 1, output_dim=64, input_length=padded_sequences.shape[1]),
+        GlobalAveragePooling1D(),
+        Dropout(0.3),
+        Dense(128, activation='relu'),
+        Dropout(0.3),
         Dense(64, activation='relu'),
-        Dropout(0.2),
-        Dense(len(label_encoder.classes_), activation='softmax')  
+        Dropout(0.3),
+        Dense(len(label_encoder.classes_), activation='softmax')
     ])
 
     optimizer = Adam(learning_rate=0.001)
