@@ -1,3 +1,7 @@
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Embedding, Dropout, GlobalAveragePooling1D
 from tensorflow.keras.optimizers import Adam
@@ -8,7 +12,7 @@ from sklearn.preprocessing import LabelEncoder
 import numpy as np
 import re
 import unicodedata
-from .database import fetch_training_data
+from services.database import fetch_training_data
 
 def preprocess_text(text: str) -> str:
     text = text.lower()
