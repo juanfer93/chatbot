@@ -31,11 +31,12 @@ def train_model():
     print("\n=== Procesando datos para entrenamiento ===")
     texts = [preprocess_text(example['text']) for example in examples]
     labels = []
-    for intent in intents:
-        for example in examples:
+    for example in examples:
+        for intent in intents:
             if example['intent_id'] == intent['id']:
                 labels.append(intent['name'])
                 print(f"Asociación encontrada: Intent({intent['name']}) con Example({example['text']})")
+                break
 
     print("Textos (primeros 5):", texts[:5])
     print("Etiquetas (primeros 5):", labels[:5])
