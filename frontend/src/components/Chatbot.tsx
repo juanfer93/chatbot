@@ -99,6 +99,12 @@ const Chatbot: React.FC = () => {
               type="text"
               value={userInput}
               onChange={(e) => setUserInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault(); 
+                  handleSendMessage();
+                }
+              }}
               className="flex-1 border rounded-lg p-2 focus:outline-none focus:ring focus:ring-blue-300"
               placeholder="Escribe un mensaje..."
             />
