@@ -33,12 +33,21 @@ def fetch_training_data():
         print(f"Error al obtener datos de Supabase: {e}")
         return [], []
 
+def get_intent_name_by_id(intent_id):
+    try:
+        response = supabase.table("intents").select("name").eq("id", intent_id).single().execute()
+        return response.data["name"] if response.data else None
+    except Exception as e:
+        print(f"Error al obtener nombre de intento por ID: {e}")
+        return None
+
 def save_unclassified_message(message):
     try:
         response = supabase.table("unclassified_messages").insert({"text": message}).execute()
         print(f"Mensaje no clasificado guardado: {response}")
     except Exception as e:
         print(f"Error al guardar mensaje no clasificado: {e}")
+
 
 def test_connection():
     try:
