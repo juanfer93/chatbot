@@ -15,21 +15,26 @@ with open('backend/model/label_encoder.npy', 'rb') as f:
     label_encoder = np.load(f)
 
 def predict_intent(message):
-    sequence = tokenizer.texts_to_sequences([message])
-    padded_sequence = pad_sequences(sequence, padding='post', maxlen=model.input_shape[1])
-    prediction = model.predict(padded_sequence)
-    intent_index = np.argmax(prediction)
-    return label_encoder[intent_index]
+    try:
+        sequence = tokenizer.texts_to_sequences([message])
+        padded_sequence = pad_sequences(sequence, padding='post', maxlen=model.input_shape[1])
+        prediction = model.predict(padded_sequence)
+        intent_index = np.argmax(prediction)
+        intent_name = label_encoder[intent_index]
+        return intent_name
+    except Exception as e:
+        print(f"Error al predecir el intento: {e}")
+        return None
 
 def handle_message(message):
     try:
-        intent_id = predict_intent(message)
-        intent_name = get_intent_name_by_id(intent_id)
-        if intent_name:
-            return f"Intento detectado: {intent_name}"
-        else:
-            save_unclassified_message(message)
-            return "No se ha detectado ningún intento."
+        intent_name = predict_intent(message)
+        if intent_name is not None:
+            intent_id = get_intent_name_by_id(intent_name)
+            if intent_id:
+                return f"Intento detectado: {intent_name}"
+        save_unclassified_message(message)
+        return "No se ha detectado ningun intento"
     except Exception as e:
         print(f"Error al predecir intento: {e}")
         save_unclassified_message(message)
