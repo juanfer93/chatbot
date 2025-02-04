@@ -30,9 +30,8 @@ def handle_message(message):
     try:
         intent_name = predict_intent(message)
         if intent_name is not None:
-            intent_id = get_intent_name_by_id(intent_name)
-            if intent_id:
-                return f"Intento detectado: {intent_name}"
+            print(f"intento detectado {intent_name}")
+            return f"intento detectado {intent_name}"
         save_unclassified_message(message)
         return "No se ha detectado ningun intento"
     except Exception as e:
