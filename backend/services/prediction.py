@@ -3,7 +3,7 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.preprocessing.text import tokenizer_from_json
 import json
-from services.database import save_unclassified_message, get_intent_name_by_id
+from services.database import save_unclassified_message
 
 model = load_model('backend/model/chatbot_model.h5')
 
