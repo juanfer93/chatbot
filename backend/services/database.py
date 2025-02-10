@@ -33,6 +33,14 @@ def fetch_training_data():
         print(f"Error al obtener datos de Supabase: {e}")
         return [], []
 
+def get_response_by_intent(intent_name):
+    try:
+        response = supabase.table("intents").select("response").eq("name", intent_name).single().execute()
+        return response.data["response"] if response.data else None
+    except Exception as e:
+        print(f"Error al obtener respuesta por intento: {e}")
+        return None 
+
 def save_unclassified_message(message):
     try:
         response = supabase.table("unclassified_messages").insert({"text": message}).execute()

@@ -3,7 +3,7 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.preprocessing.text import tokenizer_from_json
 import json
-from services.database import save_unclassified_message
+from services.database import save_unclassified_message, get_response_by_intent
 
 model = load_model('backend/model/chatbot_model.h5')
 
@@ -30,8 +30,9 @@ def handle_message(message):
     try:
         intent_name = predict_intent(message)
         if intent_name is not None:
-            print(f"intento detectado {intent_name}")
-            return f"intento detectado {intent_name}"
+            response_text = get_response_by_intent(intent_name)
+            if response_text:
+                return response_text
         save_unclassified_message(message)
         return "No se ha detectado ningun intento"
     except Exception as e:
