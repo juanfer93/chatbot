@@ -1,7 +1,7 @@
-import React from "react";
+import { FC, useRef, useEffect } from "react";
 import { useStore } from "../store/useStore";
 
-const Chatbot: React.FC = () => {
+const Chatbot: FC = () => {
   const {
     messages,
     userInput,
@@ -14,7 +14,9 @@ const Chatbot: React.FC = () => {
     setLoading,
   } = useStore();
 
-  const backendUrl = process.env.REACT_APP_BACKEND_URL; 
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
+  
+  const messageEndRef = useRef<HTMLDivElement | null>(null);
 
   const handleSendMessage = async () => {
     if (!userInput.trim()) return;
@@ -55,7 +57,13 @@ const Chatbot: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };  
+  };
+  
+  useEffect(() => {
+    if (messageEndRef.current) {
+      messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
 
   return (
     <div>
@@ -65,7 +73,6 @@ const Chatbot: React.FC = () => {
       >
         {isVisible ? "Cerrar Chat" : "Abrir Chat"}
       </button>
-
       {isVisible && (
         <div className="fixed bottom-16 right-4 w-80 h-96 bg-gray-100 border rounded-lg shadow-lg flex flex-col">
           <div className="bg-blue-500 text-white p-4 flex justify-between items-center">
@@ -77,7 +84,6 @@ const Chatbot: React.FC = () => {
               Reset
             </button>
           </div>
-
           <div className="flex-1 overflow-y-auto p-4 space-y-2">
             {messages.map((msg) => (
               <div
@@ -91,9 +97,11 @@ const Chatbot: React.FC = () => {
                 {msg.text}
               </div>
             ))}
-            {isLoading && <div className="text-gray-500">Escribiendo...</div>}
+            {isLoading && (
+              <div className="text-gray-500">Escribiendo...</div>
+            )}
+            <div ref={messageEndRef}></div>
           </div>
-
           <div className="p-4 border-t flex items-center">
             <input
               type="text"
@@ -101,7 +109,7 @@ const Chatbot: React.FC = () => {
               onChange={(e) => setUserInput(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
-                  e.preventDefault(); 
+                  e.preventDefault();
                   handleSendMessage();
                 }
               }}
