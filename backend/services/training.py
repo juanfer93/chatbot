@@ -1,7 +1,6 @@
-import sys
 import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
+import sys
+from pathlib import Path
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Embedding, Dropout, GlobalAveragePooling1D
 from tensorflow.keras.optimizers import Adam
@@ -12,7 +11,14 @@ from sklearn.preprocessing import LabelEncoder
 import numpy as np
 import re
 import unicodedata
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+sys.path.append(str(BASE_DIR))
+
 from services.database import fetch_training_data
+
+MODEL_DIR = BASE_DIR / 'model'
+os.makedirs(MODEL_DIR, exist_ok=True)
 
 def preprocess_text(text: str) -> str:
     text = text.lower()
@@ -86,16 +92,16 @@ def train_model():
     print(f"Loss final: {history.history['loss'][-1]}")
     print(f"Accuracy final: {history.history['accuracy'][-1]}")
 
-    model.save('backend/model/chatbot_model.h5')
-    print("\nModelo guardado en: model/chatbot_model.h5")
+    model.save(MODEL_DIR / 'chatbot_model.h5')
+    print("\nModelo guardado en:", MODEL_DIR / "chatbot_model.h5")
 
-    with open('backend/model/tokenizer.json', 'w') as f:
+    with open(MODEL_DIR / 'tokenizer.json', 'w') as f:
         f.write(tokenizer.to_json())
-    print("Tokenizador guardado en: model/tokenizer.json")
+    print("Tokenizador guardado en:", MODEL_DIR / "tokenizer.json")
 
-    with open('backend/model/label_encoder.npy', 'wb') as f:
+    with open(MODEL_DIR / 'label_encoder.npy', 'wb') as f:
         np.save(f, label_encoder.classes_)
-    print("Codificador de etiquetas guardado en: model/label_encoder.npy")
+    print("Codificador de etiquetas guardado en:", MODEL_DIR / "label_encoder.npy")
 
 if __name__ == "__main__":
     print("Ejecutando el entrenamiento...")
