@@ -18,15 +18,10 @@ const Chatbot: FC = () => {
 
   const messageEndRef = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
-    if (messageEndRef.current) {
-      messageEndRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [messages]);
-
+  
   const handleSendMessage = async () => {
     if (!userInput.trim()) return;
-
+    
     const userMessage = {
       id: Date.now().toString(),
       text: userInput,
@@ -64,7 +59,13 @@ const Chatbot: FC = () => {
       setLoading(false);
     }
   };
-
+  
+  useEffect(() => {
+    if (messageEndRef.current) {
+      messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
+  
   return (
     <div>
       <button
