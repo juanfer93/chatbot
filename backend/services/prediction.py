@@ -14,8 +14,8 @@ model = load_model(model_path)
 
 tokenizer_path = MODEL_DIR / 'tokenizer.json'
 with open(tokenizer_path, 'r') as f:
-    tokenizer_data = json.load(f)  
-    tokenizer = tokenizer_from_json(json.dumps(tokenizer_data))  
+    tokenizer_data = json.load(f)
+    tokenizer = tokenizer_from_json(json.dumps(tokenizer_data))
 
 label_encoder_path = MODEL_DIR / 'label_encoder.npy'
 with open(label_encoder_path, 'rb') as f:
@@ -41,7 +41,7 @@ def handle_message(message):
             if response_text:
                 return response_text
         save_unclassified_message(message)
-        return "No se ha detectado ningun intento"
+        return "No se ha detectado ningún intento"
     except Exception as e:
         print(f"Error al predecir intento: {e}")
         save_unclassified_message(message)

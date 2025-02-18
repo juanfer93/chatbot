@@ -11,12 +11,10 @@ from sklearn.preprocessing import LabelEncoder
 import numpy as np
 import re
 import unicodedata
+from prepare_data import prepare_training_data  
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 sys.path.append(str(BASE_DIR))
-
-from services.database import fetch_training_data
-
 MODEL_DIR = BASE_DIR / 'model'
 os.makedirs(MODEL_DIR, exist_ok=True)
 
@@ -28,22 +26,11 @@ def preprocess_text(text: str) -> str:
     return text
 
 def train_model():
-    intents, examples = fetch_training_data()
+    training_data = prepare_training_data()
+    texts = [preprocess_text(item['text']) for item in training_data]
+    labels = [item['intent'] for item in training_data]
 
-    print("=== Datos obtenidos de la base de datos ===")
-    print("Intents:", intents)
-    print("Examples:", examples)
-
-    print("\n=== Procesando datos para entrenamiento ===")
-    texts = [preprocess_text(example['text']) for example in examples]
-    labels = []
-    for example in examples:
-        for intent in intents:
-            if example['intent_id'] == intent['id']:
-                labels.append(intent['name'])
-                print(f"Asociación encontrada: Intent({intent['name']}) con Example({example['text']})")
-                break
-
+    print("=== Datos obtenidos ===")
     print("Textos (primeros 5):", texts[:5])
     print("Etiquetas (primeros 5):", labels[:5])
 
@@ -56,12 +43,12 @@ def train_model():
     sequences = tokenizer.texts_to_sequences(texts)
     padded_sequences = pad_sequences(sequences, padding='post')
 
+    label_encoder = LabelEncoder()
+    labels_encoded = label_encoder.fit_transform(labels)
+
     print("\n=== Secuencias procesadas ===")
     print("Primeras 5 secuencias:", padded_sequences[:5])
     print(f"Número total de palabras únicas: {len(tokenizer.word_index)}")
-
-    label_encoder = LabelEncoder()
-    labels_encoded = label_encoder.fit_transform(labels)
 
     print("\n=== Etiquetas codificadas ===")
     print("Primeras 5 etiquetas codificadas:", labels_encoded[:5])
@@ -80,14 +67,9 @@ def train_model():
 
     optimizer = Adam(learning_rate=0.001)
     model.compile(optimizer=optimizer, loss='sparse_categorical_crossentropy', metrics=['accuracy'])
-
     print("\n=== Iniciando entrenamiento ===")
-    print(f"Datos de entrada: {len(padded_sequences)} ejemplos, {len(tokenizer.word_index)} palabras únicas.")
-
     early_stopping = EarlyStopping(monitor='val_loss', patience=3, restore_best_weights=True)
-
     history = model.fit(padded_sequences, np.array(labels_encoded), epochs=50, batch_size=16, verbose=1, callbacks=[early_stopping])
-
     print("\n=== Entrenamiento completado ===")
     print(f"Loss final: {history.history['loss'][-1]}")
     print(f"Accuracy final: {history.history['accuracy'][-1]}")
