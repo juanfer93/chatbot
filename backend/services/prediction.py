@@ -9,8 +9,7 @@ from services.database import save_unclassified_message, get_response_by_intent
 BASE_DIR = Path(__file__).resolve().parent.parent
 MODEL_DIR = BASE_DIR / 'model'
 
-model_path = MODEL_DIR / 'chatbot_model.h5'
-model = load_model(model_path)
+model = load_model(MODEL_DIR / 'chatbot_model')
 
 tokenizer_path = MODEL_DIR / 'tokenizer.json'
 with open(tokenizer_path, 'r') as f:
@@ -24,7 +23,8 @@ with open(label_encoder_path, 'rb') as f:
 def predict_intent(message):
     try:
         sequence = tokenizer.texts_to_sequences([message])
-        padded_sequence = pad_sequences(sequence, padding='post', maxlen=model.input_shape[1])
+        MAX_SEQUENCE_LENGTH = 200 
+        padded_sequence = pad_sequences(sequence, padding='post', maxlen=MAX_SEQUENCE_LENGTH)
         prediction = model.predict(padded_sequence)
         intent_index = np.argmax(prediction)
         intent_name = label_encoder[intent_index]

@@ -3,19 +3,11 @@ from database import fetch_training_data
 def prepare_training_data():
     intents, examples = fetch_training_data()
 
-    training_data = []
-    for example in examples:
-        intent_name = None
-        for intent in intents:
-            if example['intent_id'] == intent['id']:
-                intent_name = intent['name']
-                break
-        if intent_name:
-            response = intent.get("response", "No tengo una respuesta para eso.")
-            training_data.append({
-                "text": example['text'],  
-                "intent": intent_name    
-            })
+    intent_map = {intent['id']: intent['name'] for intent in intents}
+    training_data = [
+        {"text": example['text'], "intent": intent_map[example['intent_id']]}
+        for example in examples if example['intent_id'] in intent_map
+    ]
 
     return training_data
 

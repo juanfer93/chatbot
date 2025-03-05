@@ -18,11 +18,14 @@ sys.path.append(str(BASE_DIR))
 MODEL_DIR = BASE_DIR / 'model'
 os.makedirs(MODEL_DIR, exist_ok=True)
 
+re_normalize = re.compile(r"[^a-záéíóúüñ¿?¡!.,\s]")
+re_whitespace = re.compile(r"\s+")
+
 def preprocess_text(text: str) -> str:
     text = text.lower()
     text = unicodedata.normalize("NFKD", text).encode("ASCII", "ignore").decode("utf-8")
-    text = re.sub(r"[^a-záéíóúüñ¿?¡!.,\s]", "", text)
-    text = re.sub(r"\s+", " ", text).strip()
+    text = re_normalize.sub("", text)
+    text = re_whitespace.sub(" ", text).strip()
     return text
 
 def train_model():
@@ -74,7 +77,7 @@ def train_model():
     print(f"Loss final: {history.history['loss'][-1]}")
     print(f"Accuracy final: {history.history['accuracy'][-1]}")
 
-    model.save(MODEL_DIR / 'chatbot_model.h5')
+    model.save(MODEL_DIR / 'chatbot_model', save_format="tf")
     print("\nModelo guardado en:", MODEL_DIR / "chatbot_model.h5")
 
     with open(MODEL_DIR / 'tokenizer.json', 'w') as f:
