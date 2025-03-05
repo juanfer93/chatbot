@@ -17,8 +17,7 @@ with open(tokenizer_path, 'r') as f:
     tokenizer = tokenizer_from_json(json.dumps(tokenizer_data))
 
 label_encoder_path = MODEL_DIR / 'label_encoder.npy'
-with open(label_encoder_path, 'rb') as f:
-    label_encoder = np.load(f)
+label_encoder = np.load(label_encoder_path, allow_pickle=True)
 
 def predict_intent(message):
     try:
