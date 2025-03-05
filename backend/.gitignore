@@ -1,6 +1,3 @@
-# Ignorar la carpeta que contiene los modelos entrenados
-backend/model/
-
 # Ignorar el entorno virtual
 venv/
 env/
