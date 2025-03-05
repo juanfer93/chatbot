@@ -18,9 +18,6 @@ with open(tokenizer_path, 'r') as f:
 
 label_encoder_path = MODEL_DIR / 'label_encoder.npy'
 label_encoder = np.load(label_encoder_path, allow_pickle=True)
-with open(label_encoder_path, 'wb') as f:
-    np.save(f, label_encoder.classes_)
-print("Codificador de etiquetas guardado en:", label_encoder_path)
 
 def predict_intent(message):
     try:
