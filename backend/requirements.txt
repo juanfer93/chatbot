@@ -12,7 +12,7 @@ keras==2.12.0
 
 # NumPy y SciPy
 numpy==1.23.5  # Versión compatible con TensorFlow, SciPy, y otras bibliotecas
-scipy==1.15.1
+scipy==1.9.3
 
 # Scikit-learn y dependencias relacionadas
 scikit-learn==1.6.1
