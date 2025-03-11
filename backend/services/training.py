@@ -1,5 +1,6 @@
 import os
 import sys
+import json
 from pathlib import Path
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Embedding, Dropout, GlobalAveragePooling1D
@@ -44,7 +45,12 @@ def train_model():
     tokenizer = Tokenizer()
     tokenizer.fit_on_texts(texts)
     sequences = tokenizer.texts_to_sequences(texts)
-    padded_sequences = pad_sequences(sequences, padding='post')
+
+    sequences_lengths = [len(seq) for seq in sequences]
+    max_length = int(np.percentile(sequences_lengths, 95))
+    print(f"\nLongitud máxima ajustada: {max_length}")
+
+    padded_sequences = pad_sequences(sequences, padding='post', maxlen=max_length)
 
     label_encoder = LabelEncoder()
     labels_encoded = label_encoder.fit_transform(labels)
@@ -58,12 +64,12 @@ def train_model():
     print(f"Clases únicas: {list(label_encoder.classes_)}")
 
     model = Sequential([
-        Embedding(input_dim=len(tokenizer.word_index) + 1, output_dim=64, input_length=padded_sequences.shape[1]),
+        Embedding(input_dim=len(tokenizer.word_index) + 1, output_dim=32, input_length=padded_sequences.shape[1]),
         GlobalAveragePooling1D(),
         Dropout(0.3),
-        Dense(128, activation='relu'),
-        Dropout(0.3),
         Dense(64, activation='relu'),
+        Dropout(0.3),
+        Dense(32, activation='relu'),
         Dropout(0.3),
         Dense(len(label_encoder.classes_), activation='softmax')
     ])
@@ -87,6 +93,10 @@ def train_model():
     with open(MODEL_DIR / 'label_encoder.npy', 'wb') as f:
         np.save(f, label_encoder.classes_)
     print("Codificador de etiquetas guardado en:", MODEL_DIR / "label_encoder.npy")
+
+    with open(MODEL_DIR / 'max_lenght.json', 'w') as f:
+        json.dump({"max_length": max_length}, f)
+    print("Longitud máxima guardada en:", MODEL_DIR / "max_length.json")
 
 if __name__ == "__main__":
     print("Ejecutando el entrenamiento...")

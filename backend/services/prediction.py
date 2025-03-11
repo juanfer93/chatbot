@@ -16,13 +16,18 @@ with open(tokenizer_path, 'r') as f:
     tokenizer_data = json.load(f)
     tokenizer = tokenizer_from_json(json.dumps(tokenizer_data))
 
+max_length_path = MODEL_DIR / 'max_length.json'
+with open(max_length_path, 'r') as f:
+    max_length_data = json.load(f)
+MAX_SEQUENCE_LENGTH = max_length_data['max_length']
+print(f"Longitud máxima: {MAX_SEQUENCE_LENGTH}")
+
 label_encoder_path = MODEL_DIR / 'label_encoder.npy'
 label_encoder = np.load(label_encoder_path, allow_pickle=True)
 
 def predict_intent(message):
     try:
         sequence = tokenizer.texts_to_sequences([message])
-        MAX_SEQUENCE_LENGTH = 200 
         padded_sequence = pad_sequences(sequence, padding='post', maxlen=MAX_SEQUENCE_LENGTH)
         prediction = model.predict(padded_sequence)
         intent_index = np.argmax(prediction)
