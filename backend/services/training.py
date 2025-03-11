@@ -94,7 +94,7 @@ def train_model():
         np.save(f, label_encoder.classes_)
     print("Codificador de etiquetas guardado en:", MODEL_DIR / "label_encoder.npy")
 
-    with open(MODEL_DIR / 'max_lenght.json', 'w') as f:
+    with open(MODEL_DIR / 'max_length.json', 'w') as f:
         json.dump({"max_length": max_length}, f)
     print("Longitud máxima guardada en:", MODEL_DIR / "max_length.json")
 
