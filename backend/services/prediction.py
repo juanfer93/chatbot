@@ -27,11 +27,16 @@ label_encoder = np.load(label_encoder_path, allow_pickle=True)
 
 def predict_intent(message):
     try:
+        print("Procesando mensaje:", message)
         sequence = tokenizer.texts_to_sequences([message])
+        print("Secuencia tokenizada:", sequence)
         padded_sequence = pad_sequences(sequence, padding='post', maxlen=MAX_SEQUENCE_LENGTH)
+        print("Secuencia rellenada:", padded_sequence)
         prediction = model.predict(padded_sequence)
+        print("Predicción generada:", prediction)
         intent_index = np.argmax(prediction)
         intent_name = label_encoder[intent_index]
+        print("Intento detectado:", intent_name)
         return intent_name
     except Exception as e:
         print(f"Error al predecir el intento: {e}")
