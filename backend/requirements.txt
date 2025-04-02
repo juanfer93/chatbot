@@ -72,7 +72,7 @@ markdown-it-py==3.0.0
 MarkupSafe==3.0.2
 mdurl==0.1.2
 multidict==6.1.0
-networkx==3.4.2
+networkx==2.8.8 
 opt-einsum==3.4.0
 optree==0.14.0
 protobuf==3.20.3
