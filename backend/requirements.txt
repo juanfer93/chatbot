@@ -4,11 +4,11 @@ Flask-Cors==5.0.0
 gunicorn==23.0.0
 
 # TensorFlow y dependencias relacionadas
-tensorflow==2.12.0
-tensorboard==2.12.0
+tensorflow==2.16.0
+tensorboard==2.16.0
 tensorflow-io-gcs-filesystem==0.31.0
 h5py==3.12.1
-keras==2.12.0
+keras==2.16.0
 
 # NumPy y SciPy
 numpy==1.23.5  # Versión compatible con TensorFlow, SciPy, y otras bibliotecas

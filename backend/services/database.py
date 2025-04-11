@@ -36,15 +36,22 @@ def fetch_training_data():
 def get_response_by_intent(intent_name):
     try:
         response = supabase.table("intents").select("response").eq("name", intent_name).single().execute()
-        return response.data["response"] if response.data else None
+        if response.data:
+            return response.data.get("response")
+        else:
+            print(f"No se encontró respuesta para el intento: {intent_name}")
+            return None
     except Exception as e:
         print(f"Error al obtener respuesta por intento: {e}")
-        return None 
+        return None
 
 def save_unclassified_message(message):
     try:
         response = supabase.table("unclassified_messages").insert({"text": message}).execute()
-        print(f"Mensaje no clasificado guardado: {response}")
+        if response.data:
+            print(f"Mensaje no clasificado guardado: {response.data}")
+        else:
+            print("No se pudo guardar el mensaje no clasificado.")
     except Exception as e:
         print(f"Error al guardar mensaje no clasificado: {e}")
 
